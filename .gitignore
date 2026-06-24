@@ -13,9 +13,14 @@ venv/
 
 # Local data (never commit private memory / vectors / uploads / reports)
 backend/data/
+backend/.venv/
 data/
 *.db
 *.sqlite3
+
+# Launcher logs
+logs/
+!logs/.gitkeep
 
 # Env / secrets
 .env

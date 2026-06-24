@@ -129,6 +129,22 @@ Open <http://localhost:3000>. The health bar shows whether the model and
 search provider are reachable. Without a model the system still runs and
 returns a clear setup message instead of crashing.
 
+## Windows one-click start
+
+1. **Double-click `START_JARVIS.bat`** in the project root. It checks/install
+   dependencies (into `backend\.venv` and `frontend\node_modules`), starts the
+   backend + frontend (and SearxNG if Docker is running), waits for them, and
+   opens <http://localhost:3000>.
+2. **Install Ollama** from <https://ollama.com> and pull a model
+   (`ollama pull llama3.1:8b`) — otherwise chat shows a setup message. The
+   launcher warns you if Ollama isn't running but continues.
+3. **Logs** are written to the `logs\` folder (`launcher.log`, `backend.log`,
+   `frontend.log`). The two server windows stay open so you can see errors.
+4. **If it fails:** read the message in the window / `logs\launcher.log`, fix
+   the reported issue (install Python 3.10+ or Node LTS, free port 8000/3000,
+   start Docker), and double-click again. To stop everything, double-click
+   **`STOP_JARVIS.bat`**.
+
 ## Installing Ollama + a model
 
 1. Install Ollama: <https://ollama.com/download>
