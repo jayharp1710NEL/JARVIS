@@ -7,7 +7,7 @@ rem Close the launcher-spawned windows by title
 taskkill /FI "WINDOWTITLE eq JARVIS Backend*"  /T /F >nul 2>&1
 taskkill /FI "WINDOWTITLE eq JARVIS Frontend*" /T /F >nul 2>&1
 
-rem Kill whatever is still listening on the app ports
+rem Kill whatever is still LISTENING on the app ports
 call :killport 8000
 call :killport 3000
 
@@ -19,7 +19,10 @@ pause
 exit /b 0
 
 :killport
+set "FOUND=0"
 for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":%~1 .*LISTENING"') do (
   taskkill /F /PID %%P >nul 2>&1
+  set "FOUND=1"
 )
+if "%FOUND%"=="1" ( echo   freed port %~1 ) else ( echo   port %~1 was already free )
 exit /b 0
