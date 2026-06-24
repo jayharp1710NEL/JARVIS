@@ -1,0 +1,30 @@
+# Minimal SearxNG config for JARVIS-LOCAL.
+# IMPORTANT: the JSON format MUST be enabled for the agent to read results.
+# Change `secret_key` before any non-local exposure.
+use_default_settings: true
+
+general:
+  instance_name: "JARVIS-LOCAL Search"
+  debug: false
+
+server:
+  secret_key: "change-me-please-0000000000000000"
+  limiter: false
+  image_proxy: true
+
+search:
+  safe_search: 1
+  autocomplete: ""
+  default_lang: "en"
+  formats:
+    - html
+    - json   # required by JARVIS-LOCAL
+
+ui:
+  static_use_hash: true
+
+engines:
+  - name: wikipedia
+    disabled: false
+  - name: duckduckgo
+    disabled: false

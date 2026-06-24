@@ -1,0 +1,49 @@
+# JARVIS-LOCAL — local-first stack.
+# Ollama is expected to run on the HOST (so it can use your GPU). The backend
+# reaches it via host.docker.internal. SearxNG runs in-compose for private
+# web search.
+services:
+  backend:
+    build: ./backend
+    container_name: jarvis-backend
+    ports:
+      - "8000:8000"
+    environment:
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.1:8b}
+      SEARCH_PROVIDER: ${SEARCH_PROVIDER:-searxng}
+      SEARXNG_URL: http://searxng:8080
+      DATA_DIR: /app/data
+      CORS_ORIGINS: http://localhost:3000
+    volumes:
+      - jarvis-data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - searxng
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: jarvis-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: jarvis-searxng
+    ports:
+      - "8080:8080"
+    environment:
+      SEARXNG_BASE_URL: http://localhost:8080/
+    volumes:
+      - ./searxng:/etc/searxng:rw
+    restart: unless-stopped
+
+volumes:
+  jarvis-data:
